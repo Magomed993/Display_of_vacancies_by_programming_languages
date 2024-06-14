@@ -38,3 +38,4 @@ Authorization: Bearer {ACCESS_TOKEN}
 ## Примечания
 Пример работы данного проекта:
 
+![Снимок экрана (9)](https://github.com/Magomed993/Display_of_vacancies_by_programming_languages/assets/160238040/43ce5bf7-2ce9-4c34-9043-e26f05eecfb5)
