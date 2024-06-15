@@ -2,7 +2,6 @@ import os
 import requests
 from dotenv import load_dotenv
 from terminaltables import AsciiTable
-load_dotenv()
 
 
 def get_access_token_hhru(client_id, client_secret):
@@ -160,15 +159,12 @@ def get_a_table_with_vacancies(function_of_found_vacancies, title=None):
 
 
 if __name__ == '__main__':
+    load_dotenv()
     languages = ['Python', 'Java', 'Javascript', '1C', 'ruby', 'C', 'C#', 'C++', 'js', 'go']
-    hhru_client_id = os.environ['HHRU_ID']
-    hhru_client_secret = os.environ['HHRU_SECRET_KEY']
     hhru_access_token = os.environ['HHRU_ACCESS_TOKEN']
-
-    superjob_client_id = os.environ['SUPERJOB_ID']
     superjob_client_secret = os.environ['SUPERJOB_SECRET_KEY']
     superjob_access_token = os.environ['SUPERJOB_ACCESS_TOKEN']
-    superjob_code = os.environ['SUPERJOB_CODE']
+
     hhru_title = 'HeadHunter Moscow'
     superjob_title = 'SuperJob Moscow'
 
