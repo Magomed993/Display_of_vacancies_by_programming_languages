@@ -20,8 +20,8 @@ pip install -r requirements.txt
    - `get_access_token_hhru` - аргументами которых служат данные полученные после регистрации приложения.
 ## Переменные окружения
 Сгенерированный access_token необходим для установления переменной окружения в секретный файл формата `.env`.
-  - для работы функции `get_vacancy_count_superjob` необходимо добавить в переменную окружения `client_secret` и `access_token`, полученные при [регистрации](https://github.com/Magomed993/Display_of_vacancies_by_programming_languages/edit/main/README.md#%D0%BE%D0%BA%D1%80%D1%83%D0%B6%D0%B5%D0%BD%D0%B8%D1%8F) приложения;
-  - для работы функции `get_vacancy_count_hh` хватает только `access_token`, полученный при [регистрации](https://github.com/Magomed993/Display_of_vacancies_by_programming_languages/edit/main/README.md#%D0%BE%D0%BA%D1%80%D1%83%D0%B6%D0%B5%D0%BD%D0%B8%D1%8F) приложения.
+  - для работы функции `get_vacancy_count_superjob` необходимо добавить в переменную окружения `client_secret` и `access_token`, полученные при [регистрации](#окружения) приложения;
+  - для работы функции `get_vacancy_count_hh` хватает только `access_token`, полученный при [регистрации](#окружения) приложения.
 ### Как получить
 Для корректной работы `.env` задать в файле `.env` наименование переменной окружения схожей в имеющемся коде, например, `HHRU_ID=(ваш ID)`,
 `HHRU_SECRET_KEY=(ваш ключ)` и `HHRU_ACCESS_TOKEN=(ваш access_ключ)`.
