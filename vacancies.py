@@ -52,10 +52,10 @@ def get_response_hhru(vacant_languages, token, page=None):
     return response.json()
 
 
-def get_vacancy_count_hh(vacant_languages, token):
+def get_vacancies_hhru(vacant_languages, token):
     vacancies = {}
     for language in vacant_languages:
-        average_vacancies = []
+        expected_salaries = []
         total_vacancies_processed = 0
         for page in range(get_response_hhru(language, token)['pages']):
             try:
@@ -63,11 +63,11 @@ def get_vacancy_count_hh(vacant_languages, token):
             except Exception as e:
                 print(f"Error fetching data for {language} on page {page}: {e}")
                 continue
-            items = full_response['items']
-            for item in items:
-                average_vacancies.append(predict_rub_salary_for_hhru(item['salary']))
+            information_vacancies = full_response['items']
+            for information_vacancy in information_vacancies:
+                expected_salaries.append(predict_rub_salary_for_hhru(information_vacancy['salary']))
                 total_vacancies_processed += 1
-        meaning_salaries = [i for i in average_vacancies if i is not None]
+        meaning_salaries = [i for i in expected_salaries if i is not None]
         if meaning_salaries:
             meaning = sum(meaning_salaries) / len(meaning_salaries)
         else:
@@ -97,7 +97,7 @@ def predict_rub_salary_for_hhru(salaries):
         return None
 
 
-def get_vacancy_count_superjob(vacant_languages, secret, access_token):
+def get_vacancies_superjob(vacant_languages, secret, access_token):
     city = 'Москва'
     vacancies = {}
     for language in vacant_languages:
@@ -113,10 +113,10 @@ def get_vacancy_count_superjob(vacant_languages, secret, access_token):
         response = requests.get(url_superjob, headers=headers, params=params)
         response.raise_for_status()
         full_response = response.json()
-        average_vacancies = []
-        for object_name in full_response['objects']:
-            average_vacancies.append(predict_rub_salary_for_superJob(object_name))
-        meaning_salaries = [i for i in average_vacancies if i is not None]
+        expected_salaries = []
+        for vacancy_information in full_response['objects']:
+            expected_salaries.append(predict_rub_salary_for_superJob(vacancy_information))
+        meaning_salaries = [i for i in expected_salaries if i is not None]
         if meaning_salaries:
             meaning = sum(meaning_salaries) / len(meaning_salaries)
         else:
@@ -146,7 +146,7 @@ def predict_rub_salary_for_superJob(salaries):
         return None
 
 
-def get_a_table_with_vacancies(function_of_found_vacancies, title=None):
+def get_table_with_vacancies(function_of_found_vacancies, title=None):
     heading = title
     extraction = (['Язык программирования'] +
                   list(next(iter(function_of_found_vacancies.values())).keys()))
@@ -168,7 +168,7 @@ if __name__ == '__main__':
     hhru_title = 'HeadHunter Moscow'
     superjob_title = 'SuperJob Moscow'
 
-    print(get_a_table_with_vacancies(get_vacancy_count_superjob(
+    print(get_table_with_vacancies(get_vacancies_superjob(
         languages, superjob_client_secret, superjob_access_token), superjob_title))
     print()
-    print(get_a_table_with_vacancies(get_vacancy_count_hh(languages, hhru_access_token), hhru_title))
+    print(get_table_with_vacancies(get_vacancies_hhru(languages, hhru_access_token), hhru_title))
