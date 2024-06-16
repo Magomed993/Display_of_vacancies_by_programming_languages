@@ -52,7 +52,7 @@ def get_response_hhru(vacant_language, token, page=None):
     return response.json()
 
 
-def get_vacancies_hhru(vacant_languages, token):
+def get_statistics_hhru(vacant_languages, token):
     vacancies = {}
     for language in vacant_languages:
         expected_salaries = []
@@ -103,7 +103,7 @@ def get_response_superjob(vacant_language, secret, access_token, page=None):
     return full_response
 
 
-def get_vacancies_superjob(vacant_languages, secret, access_token):
+def get_statistics_superjob(vacant_languages, secret, access_token):
     vacancies = {}
     for language in vacant_languages:
         expected_salaries = []
@@ -170,7 +170,7 @@ if __name__ == '__main__':
     hhru_title = 'HeadHunter Moscow'
     superjob_title = 'SuperJob Moscow'
 
-    print(get_table_with_vacancies(get_vacancies_superjob(
+    print(get_table_with_vacancies(get_statistics_superjob(
         languages, superjob_client_secret, superjob_access_token), superjob_title))
     print()
-    print(get_table_with_vacancies(get_vacancies_hhru(languages, hhru_access_token), hhru_title))
+    print(get_table_with_vacancies(get_statistics_hhru(languages, hhru_access_token), hhru_title))
