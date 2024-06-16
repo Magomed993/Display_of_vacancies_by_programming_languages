@@ -59,10 +59,10 @@ def get_vacancies_hhru(vacant_languages, token):
         total_vacancies_processed = 0
         for page in range(100):
             full_response = get_response_hhru(language, token, page)
-            information_vacancies = full_response['items']
-            for information_vacancy in information_vacancies:
-                expected_salaries.append(predict_rub_salary_for_hhru(information_vacancy['salary']))
-                if predict_rub_salary_for_hhru(information_vacancy['salary']):
+            vacancies = full_response['items']
+            for vacancy in vacancies:
+                expected_salaries.append(predict_rub_salary_for_hhru(vacancy['salary']))
+                if predict_rub_salary_for_hhru(vacancy['salary']):
                     total_vacancies_processed += 1
         meaning_salaries = [i for i in expected_salaries if i]
         if meaning_salaries:
@@ -113,8 +113,8 @@ def get_vacancies_superjob(vacant_languages, secret, access_token):
             full_response = get_response_superjob(language, secret, access_token, page)
             if page == 0:
                 total_vacancies = full_response['total']
-            for vacancy_information in full_response['objects']:
-                expected_salaries.append(predict_rub_salary_for_superJob(vacancy_information))
+            for vacancy in full_response['objects']:
+                expected_salaries.append(predict_rub_salary_for_superJob(vacancy))
             page += 1
             more = full_response['more']
         meaning_salaries = [i for i in expected_salaries if i]
