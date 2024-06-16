@@ -57,8 +57,7 @@ def get_vacancies_hhru(vacant_languages, token):
     for language in vacant_languages:
         expected_salaries = []
         total_vacancies_processed = 0
-        response = get_response_hhru(language, token)
-        for page in range(response['pages']):
+        for page in range(100):
             full_response = get_response_hhru(language, token, page)
             information_vacancies = full_response['items']
             for information_vacancy in information_vacancies:
@@ -71,7 +70,7 @@ def get_vacancies_hhru(vacant_languages, token):
         else:
             meaning = 0
         vacancies[language] = {
-            'Вакансий найдено': response['found'],
+            'Вакансий найдено': full_response['found'],
             'Средняя зарплата': int(meaning),
             'Вакансий обработано': total_vacancies_processed,
         }
@@ -110,9 +109,10 @@ def get_vacancies_superjob(vacant_languages, secret, access_token):
         expected_salaries = []
         page = 0
         more = True
-        response = get_response_superjob(language, secret, access_token)
         while more:
             full_response = get_response_superjob(language, secret, access_token, page)
+            if page == 0:
+                total_vacancies = full_response['total']
             for vacancy_information in full_response['objects']:
                 expected_salaries.append(predict_rub_salary_for_superJob(vacancy_information))
             page += 1
@@ -123,7 +123,7 @@ def get_vacancies_superjob(vacant_languages, secret, access_token):
         else:
             meaning = 0
         vacancies[language] = {
-            'Вакансий найдено': response['total'],
+            'Вакансий найдено': total_vacancies,
             'Средняя зарплата': int(meaning),
             'Вакансий обработано': len(meaning_salaries),
         }
@@ -162,7 +162,7 @@ def get_table_with_vacancies(function_of_found_vacancies, title=None):
 
 if __name__ == '__main__':
     load_dotenv()
-    languages = ['Python', 'Java', 'Javascript', '1С', 'ruby', 'C', 'C#', 'C++', 'js', 'go']
+    languages = ['Python', 'Java', 'Javascript', '1c', 'ruby', 'C', 'C#', 'C++', 'js', 'go']
     hhru_access_token = os.environ['HHRU_ACCESS_TOKEN']
     superjob_client_secret = os.environ['SUPERJOB_SECRET_KEY']
     superjob_access_token = os.environ['SUPERJOB_ACCESS_TOKEN']
@@ -172,5 +172,5 @@ if __name__ == '__main__':
 
     print(get_table_with_vacancies(get_vacancies_superjob(
         languages, superjob_client_secret, superjob_access_token), superjob_title))
-    print()
-    print(get_table_with_vacancies(get_vacancies_hhru(languages, hhru_access_token), hhru_title))
+    # print()
+    # print(get_table_with_vacancies(get_vacancies_hhru(languages, hhru_access_token), hhru_title))
