@@ -53,7 +53,7 @@ def get_response_hhru(vacant_language, token, page=None):
 
 
 def get_statistics_hhru(vacant_languages, token):
-    vacancies = {}
+    full_vacancies = {}
     for language in vacant_languages:
         expected_salaries = []
         total_vacancies_processed = 0
@@ -70,12 +70,12 @@ def get_statistics_hhru(vacant_languages, token):
             meaning = sum(salaries) / len(salaries)
         else:
             meaning = 0
-        vacancies[language] = {
+        full_vacancies[language] = {
             'Вакансий найдено': full_response['found'],
             'Средняя зарплата': int(meaning),
             'Вакансий обработано': total_vacancies_processed,
         }
-    return vacancies
+    return full_vacancies
 
 
 def predict_rub_salary_for_hhru(salaries):
