@@ -36,11 +36,11 @@ def get_access_token_superjob(code, client_id, client_secret, redirect_uri):
     return token_access
 
 
-def get_response_hhru(vacant_languages, token, page=None):
+def get_response_hhru(vacant_language, token, page=None):
     moscow_city_id = '1'
     url = 'https://api.hh.ru/vacancies'
     payload = {
-        'text': vacant_languages,
+        'text': vacant_language,
         'area': moscow_city_id,
         'page': page,
     }
@@ -85,7 +85,7 @@ def predict_rub_salary_for_hhru(salaries):
     return calculates_average_salary(salary_from, salary_to)
 
 
-def get_response_superjob(vacant_languages, secret, access_token, page=None):
+def get_response_superjob(vacant_language, secret, access_token, page=None):
     city = 'Москва'
     headers = {
         'X-Api-App-Id': secret,
@@ -95,7 +95,7 @@ def get_response_superjob(vacant_languages, secret, access_token, page=None):
     params = {
         'page': page,
         'town': city,
-        'keyword': f'{vacant_languages}',
+        'keyword': f'{vacant_language}',
     }
     response = requests.get(url_superjob, headers=headers, params=params)
     response.raise_for_status()
@@ -130,11 +130,11 @@ def get_vacancies_superjob(vacant_languages, secret, access_token):
     return vacancies
 
 
-def predict_rub_salary_for_superJob(salaries):
-    if not salaries:
+def predict_rub_salary_for_superJob(salary):
+    if not salary:
         return None
-    salary_from = salaries['payment_from']
-    salary_to = salaries['payment_to']
+    salary_from = salary['payment_from']
+    salary_to = salary['payment_to']
     return calculates_average_salary(salary_from, salary_to)
 
 
