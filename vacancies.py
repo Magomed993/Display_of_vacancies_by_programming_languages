@@ -64,9 +64,9 @@ def get_vacancies_hhru(vacant_languages, token):
                 expected_salaries.append(predict_rub_salary_for_hhru(vacancy['salary']))
                 if predict_rub_salary_for_hhru(vacancy['salary']):
                     total_vacancies_processed += 1
-        meaning_salaries = [i for i in expected_salaries if i]
-        if meaning_salaries:
-            meaning = sum(meaning_salaries) / len(meaning_salaries)
+        salaries = [i for i in expected_salaries if i]
+        if salaries:
+            meaning = sum(salaries) / len(salaries)
         else:
             meaning = 0
         vacancies[language] = {
@@ -117,15 +117,15 @@ def get_vacancies_superjob(vacant_languages, secret, access_token):
                 expected_salaries.append(predict_rub_salary_for_superJob(vacancy))
             page += 1
             more = full_response['more']
-        meaning_salaries = [i for i in expected_salaries if i]
-        if meaning_salaries:
-            meaning = sum(meaning_salaries) / len(meaning_salaries)
+        salaries = [i for i in expected_salaries if i]
+        if salaries:
+            meaning = sum(salaries) / len(salaries)
         else:
             meaning = 0
         vacancies[language] = {
             'Вакансий найдено': total_vacancies,
             'Средняя зарплата': int(meaning),
-            'Вакансий обработано': len(meaning_salaries),
+            'Вакансий обработано': len(salaries),
         }
     return vacancies
 
