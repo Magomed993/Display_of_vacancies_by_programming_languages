@@ -61,8 +61,9 @@ def get_statistics_hhru(vacant_languages, token):
             full_response = get_response_hhru(language, token, page)
             vacancies = full_response['items']
             for vacancy in vacancies:
-                expected_salaries.append(predict_rub_salary_for_hhru(vacancy['salary']))
-                if predict_rub_salary_for_hhru(vacancy['salary']):
+                predicted_salary = predict_rub_salary_for_hhru(vacancy['salary'])
+                expected_salaries.append(predicted_salary)
+                if predicted_salary:
                     total_vacancies_processed += 1
         salaries = [i for i in expected_salaries if i]
         if salaries:
