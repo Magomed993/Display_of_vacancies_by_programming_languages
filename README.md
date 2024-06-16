@@ -45,4 +45,4 @@ python vacancies.py
 ## Примечания
 Пример работы данного проекта:
 
-![Снимок экрана (9)](https://github.com/Magomed993/Display_of_vacancies_by_programming_languages/assets/160238040/43ce5bf7-2ce9-4c34-9043-e26f05eecfb5)
+![Снимок экрана (11)](https://github.com/Magomed993/Display_of_vacancies_by_programming_languages/assets/160238040/13b88009-43ea-4170-b095-2a9a4c3652a9)
