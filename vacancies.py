@@ -57,23 +57,21 @@ def get_vacancies_hhru(vacant_languages, token):
     for language in vacant_languages:
         expected_salaries = []
         total_vacancies_processed = 0
-        for page in range(get_response_hhru(language, token)['pages']):
-            try:
-                full_response = get_response_hhru(language, token, page)
-            except Exception as e:
-                print(f"Error fetching data for {language} on page {page}: {e}")
-                continue
+        response = get_response_hhru(language, token)
+        for page in range(response['pages']):
+            full_response = get_response_hhru(language, token, page)
             information_vacancies = full_response['items']
             for information_vacancy in information_vacancies:
                 expected_salaries.append(predict_rub_salary_for_hhru(information_vacancy['salary']))
-                total_vacancies_processed += 1
-        meaning_salaries = [i for i in expected_salaries if i is not None]
+                if predict_rub_salary_for_hhru(information_vacancy['salary']):
+                    total_vacancies_processed += 1
+        meaning_salaries = [i for i in expected_salaries if i]
         if meaning_salaries:
             meaning = sum(meaning_salaries) / len(meaning_salaries)
         else:
             meaning = 0
         vacancies[language] = {
-            'Вакансий найдено': full_response['found'],
+            'Вакансий найдено': response['found'],
             'Средняя зарплата': int(meaning),
             'Вакансий обработано': total_vacancies_processed,
         }
@@ -81,48 +79,51 @@ def get_vacancies_hhru(vacant_languages, token):
 
 
 def predict_rub_salary_for_hhru(salaries):
-    if salaries:
-        salary_from = salaries['from']
-        salary_to = salaries['to']
-        if salary_from and salary_to:
-            average_value = (salary_from + salary_to) / 2
-        elif salary_from:
-            average_value = salary_from * 1.2
-        elif salary_to:
-            average_value = salary_to * 0.8
-        else:
-            return None
-        return int(average_value)
-    else:
+    if not salaries:
         return None
+    salary_from = salaries['from']
+    salary_to = salaries['to']
+    return calculates_average_salary(salary_from, salary_to)
+
+
+def get_response_superjob(vacant_languages, secret, access_token, page=None):
+    city = 'Москва'
+    headers = {
+        'X-Api-App-Id': secret,
+        'Authorization': f'Bearer {access_token}'
+    }
+    url_superjob = 'https://api.superjob.ru/2.0/vacancies/'
+    params = {
+        'page': page,
+        'town': city,
+        'keyword': f'{vacant_languages}',
+    }
+    response = requests.get(url_superjob, headers=headers, params=params)
+    response.raise_for_status()
+    full_response = response.json()
+    return full_response
 
 
 def get_vacancies_superjob(vacant_languages, secret, access_token):
-    city = 'Москва'
     vacancies = {}
     for language in vacant_languages:
-        headers = {
-            'X-Api-App-Id': secret,
-            'Authorization': f'Bearer {access_token}'
-        }
-        url_superjob = 'https://api.superjob.ru/2.0/vacancies/'
-        params = {
-            'town': city,
-            'keyword': f'{language}',
-        }
-        response = requests.get(url_superjob, headers=headers, params=params)
-        response.raise_for_status()
-        full_response = response.json()
         expected_salaries = []
-        for vacancy_information in full_response['objects']:
-            expected_salaries.append(predict_rub_salary_for_superJob(vacancy_information))
-        meaning_salaries = [i for i in expected_salaries if i is not None]
+        page = 0
+        more = True
+        response = get_response_superjob(language, secret, access_token)
+        while more:
+            full_response = get_response_superjob(language, secret, access_token, page)
+            for vacancy_information in full_response['objects']:
+                expected_salaries.append(predict_rub_salary_for_superJob(vacancy_information))
+            page += 1
+            more = full_response['more']
+        meaning_salaries = [i for i in expected_salaries if i]
         if meaning_salaries:
             meaning = sum(meaning_salaries) / len(meaning_salaries)
         else:
             meaning = 0
         vacancies[language] = {
-            'Вакансий найдено': full_response['total'],
+            'Вакансий найдено': response['total'],
             'Средняя зарплата': int(meaning),
             'Вакансий обработано': len(meaning_salaries),
         }
@@ -130,20 +131,21 @@ def get_vacancies_superjob(vacant_languages, secret, access_token):
 
 
 def predict_rub_salary_for_superJob(salaries):
-    if salaries:
-        salary_from = salaries['payment_from']
-        salary_to = salaries['payment_to']
-        if salary_from and salary_to:
-            average = (salary_from + salary_to) / 2
-        elif salary_from:
-            average = salary_from * 1.2
-        elif salary_to:
-            average = salary_to * 0.8
-        else:
-            return None
-        return int(average)
-    else:
+    if not salaries:
         return None
+    salary_from = salaries['payment_from']
+    salary_to = salaries['payment_to']
+    return calculates_average_salary(salary_from, salary_to)
+
+
+def calculates_average_salary(salary_from, salary_to):
+    if salary_from and salary_to:
+        return int((salary_from + salary_to) / 2)
+    elif salary_from:
+        return int(salary_from * 1.2)
+    elif salary_to:
+        return int(salary_to * 0.8)
+    return None
 
 
 def get_table_with_vacancies(function_of_found_vacancies, title=None):
@@ -160,7 +162,7 @@ def get_table_with_vacancies(function_of_found_vacancies, title=None):
 
 if __name__ == '__main__':
     load_dotenv()
-    languages = ['Python', 'Java', 'Javascript', '1C', 'ruby', 'C', 'C#', 'C++', 'js', 'go']
+    languages = ['Python', 'Java', 'Javascript', '1С', 'ruby', 'C', 'C#', 'C++', 'js', 'go']
     hhru_access_token = os.environ['HHRU_ACCESS_TOKEN']
     superjob_client_secret = os.environ['SUPERJOB_SECRET_KEY']
     superjob_access_token = os.environ['SUPERJOB_ACCESS_TOKEN']
