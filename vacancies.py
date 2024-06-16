@@ -95,7 +95,7 @@ def get_response_superjob(vacant_language, secret, access_token, page=None):
     params = {
         'page': page,
         'town': city,
-        'keyword': f'{vacant_language}',
+        'keyword': vacant_language,
     }
     response = requests.get(url_superjob, headers=headers, params=params)
     response.raise_for_status()
@@ -172,5 +172,5 @@ if __name__ == '__main__':
 
     print(get_table_with_vacancies(get_vacancies_superjob(
         languages, superjob_client_secret, superjob_access_token), superjob_title))
-    # print()
-    # print(get_table_with_vacancies(get_vacancies_hhru(languages, hhru_access_token), hhru_title))
+    print()
+    print(get_table_with_vacancies(get_vacancies_hhru(languages, hhru_access_token), hhru_title))
