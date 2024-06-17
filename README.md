@@ -10,11 +10,8 @@ pip install -r requirements.txt
 Для полноценной работы нужно получить `access_token`, а для его получения необходимо:
 1. Зарегистрировать приложение [Регистрация SuperJob](https://api.superjob.ru/info/) и [Регистрация hh.ru](https://dev.hh.ru/admin):
    - Регистрацию приложения производят путем заполнения заявки на сайте [Регистрация SuperJob](https://api.superjob.ru/info/) и [Регистрация hh.ru](https://dev.hh.ru/admin) для разработчиков;
-   - После успешной регистрации приложения вы получите `ID`, `Client ID` и `Secret_key`, `Client Secret` приложения для [SuperJob](https://api.superjob.ru/info/) и [hh.ru](https://dev.hh.ru/admin) в личном кабинете для разработчиков;
+   - После успешной регистрации приложения вы получите `ID`, `Client ID` приложения для [SuperJob](https://api.superjob.ru/info/) и `Secret_key`, `Client Secret` приложения для [hh.ru](https://dev.hh.ru/admin) в личном кабинете для разработчиков;
 2. Авторизовать приложение [Авторизация SuperJob](https://api.superjob.ru/#auth) и [Авторизация hh.ru](https://api.hh.ru/openapi/redoc#tag/Avtorizaciya-prilozheniya):
-    - Получаем access_token указанного с помощью функции `get_access_token_hhru` и `get_access_token_superjob`;
-    - Приложение должно использовать полученный access_token для авторизации, передавая его в заголовке в формате:
-      Authorization: Bearer {ACCESS_TOKEN};
 3. Получение `access_token` производится согласно инструкции к руководству [hh.ru](https://github.com/hhru/api?tab=readme-ov-file) и [SuperJob](https://api.superjob.ru/).
 ## Переменные окружения
 Сгенерированный access_token необходим для установления переменной окружения в секретный файл формата `.env`.
