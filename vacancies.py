@@ -80,7 +80,7 @@ def get_statistics_superjob(vacant_languages, secret, access_token):
         more = True
         while more:
             full_response = get_response_superjob(language, secret, access_token, page)
-            if page == 0:
+            if not page:
                 total_vacancies = full_response['total']
             for vacancy in full_response['objects']:
                 expected_salaries.append(predict_rub_salary_for_superJob(vacancy))
