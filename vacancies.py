@@ -47,11 +47,11 @@ def get_statistics_hhru(vacant_languages, token):
     return full_vacancies
 
 
-def predict_rub_salary_for_hhru(salaries):
-    if not salaries:
+def predict_rub_salary_for_hhru(salary):
+    if not salary:
         return None
-    salary_from = salaries['from']
-    salary_to = salaries['to']
+    salary_from = salary['from']
+    salary_to = salary['to']
     return calculates_average_salary(salary_from, salary_to)
 
 
