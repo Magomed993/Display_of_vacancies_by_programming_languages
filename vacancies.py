@@ -118,12 +118,11 @@ def calculates_average_salary(salary_from, salary_to):
     return None
 
 
-def get_table_with_vacancies(function_of_found_vacancies, title=None):
+def get_table_with_vacancies(handle_vacancies, title=None):
     heading = title
-    extraction = (['Язык программирования'] +
-                  list(next(iter(function_of_found_vacancies.values())).keys()))
-    table = [extraction]
-    for record, fields in function_of_found_vacancies.items():
+    vacancy_stats = (['Язык программирования'] + list(next(iter(handle_vacancies.values())).keys()))
+    table = [vacancy_stats]
+    for record, fields in handle_vacancies.items():
         row = [record] + list(fields.values())
         table.append(row)
     table_instance = AsciiTable(table, heading)
