@@ -4,38 +4,6 @@ from dotenv import load_dotenv
 from terminaltables import AsciiTable
 
 
-def get_access_token_hhru(client_id, client_secret):
-    token_url = 'https://api.hh.ru/token'
-    payload = {
-        'client_id': client_id,
-        'client_secret': client_secret,
-        'grant_type': 'client_credentials',
-    }
-    headers = {
-        'User-Agent': 'YourAppName/1.0',
-        'Content-Type': 'application/x-www-form-urlencoded',
-    }
-    response_token = requests.post(token_url, headers=headers, params=payload)
-    response_token.raise_for_status()
-    token_info = response_token.json()
-    access_token = token_info['access_token']
-    return access_token
-
-
-def get_access_token_superjob(code, client_id, client_secret, redirect_uri):
-    payload = {
-        'code': code,
-        'redirect_uri': redirect_uri,
-        'client_id': client_id,
-        'client_secret': client_secret,
-    }
-    url_superjob = 'https://api.superjob.ru/2.0/oauth2/access_token/'
-    response = requests.post(url_superjob, params=payload)
-    response.raise_for_status()
-    token_access = response.json()
-    return token_access
-
-
 def get_response_hhru(vacant_language, token, page=None):
     moscow_city_id = '1'
     url = 'https://api.hh.ru/vacancies'
