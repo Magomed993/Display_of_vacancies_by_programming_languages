@@ -25,7 +25,9 @@ def get_statistics_hhru(vacant_languages, token):
     for language in vacant_languages:
         expected_salaries = []
         total_vacancies_processed = 0
-        for page in range(100):
+        page = 0
+        last_page = False
+        while not last_page:
             full_response = get_response_hhru(language, token, page)
             vacancies = full_response['items']
             for vacancy in vacancies:
@@ -33,6 +35,8 @@ def get_statistics_hhru(vacant_languages, token):
                 expected_salaries.append(predicted_salary)
                 if predicted_salary:
                     total_vacancies_processed += 1
+            page += 1
+            last_page = page == full_response['pages']
         salaries = [i for i in expected_salaries if i]
         if salaries:
             meaning = sum(salaries) / len(salaries)
